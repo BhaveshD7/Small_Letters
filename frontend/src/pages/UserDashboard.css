@@ -1,0 +1,390 @@
+/* ============================================
+   USER DASHBOARD
+   ============================================ */
+
+.user-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    min-height: 100vh;
+}
+
+.dashboard-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.user-profile {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.user-avatar-large {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.user-avatar-large img,
+.avatar-placeholder-large {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder-large {
+    background: #0d4e69;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 36px;
+}
+
+.user-info h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 8px 0;
+}
+
+.user-email {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0 0 4px 0;
+}
+
+.user-role {
+    font-size: 14px;
+    font-weight: 600;
+    color: #667eea;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-logout {
+    padding: 10px 24px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.stat-item {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s;
+}
+
+.stat-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.dashboard-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tab {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0d4e69;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+}
+
+.tab:hover {
+    color: #111827;
+}
+
+.tab.active {
+    color: #6893a6;
+    border-bottom-color: #0d4e69;
+}
+
+/* ============================================
+   POSTS GRID
+   ============================================ */
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.post-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.post-card-image {
+    width: 100%;
+    height: 200px;
+    background: #f3f4f6;
+    overflow: hidden;
+}
+
+.post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: capitalize;
+    margin-bottom: 12px;
+    align-self: flex-start;
+}
+
+.post-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.post-card-subtitle {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.post-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #9ca3af;
+    margin-top: auto;
+}
+
+.post-card-stats {
+    display: flex;
+    gap: 12px;
+}
+
+/* ============================================
+   COMMENTS LIST
+   ============================================ */
+
+.comments-list-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.comment-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+}
+
+.comment-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.comment-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.comment-post-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #667eea;
+    text-decoration: none;
+}
+
+.comment-post-link:hover {
+    text-decoration: underline;
+}
+
+.comment-date {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.comment-card-text {
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.comment-view-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.comment-view-link:hover {
+    color: #667eea;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    grid-column: 1 / -1;
+}
+
+.empty-state p {
+    font-size: 16px;
+    color: #9ca3af;
+    margin: 0 0 24px 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .user-dashboard {
+        padding: 32px 16px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .user-profile {
+        width: 100%;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .header-actions button {
+        width: 100%;
+    }
+
+    .user-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+        white-space: nowrap;
+    }
+
+    .posts-grid {
+        grid-template-columns: 1fr;
+    }
+}

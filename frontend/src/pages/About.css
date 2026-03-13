@@ -1,0 +1,95 @@
+.about-page {
+  max-width: 580px;
+  padding-top: 56px;
+  padding-bottom: 80px;
+}
+
+.about-mark {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hand);
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.about-page h1 {
+  font-family: var(--font-hand);
+  font-size: 38px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.about-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+.about-body {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 44px;
+}
+.about-body p { margin-bottom: 20px; }
+
+/* Series list */
+.about-series-list {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+.about-series-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--lighter);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.about-series-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-style: italic;
+}
+.about-series-item:last-child { border-bottom: none; }
+.about-series-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--rose-soft);
+  border: 1px solid #e8c4c8;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rose);
+  font-style: normal;
+  flex-shrink: 0;
+}
+
+.about-subscribe {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+}
+.about-subscribe-hed {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-style: italic;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}

@@ -1,0 +1,202 @@
+/* ─────────────────────────────────────────
+   Small Letters — Global Styles
+   Palette: warm ivory, deep ink, dusty rose accent
+───────────────────────────────────────── */
+:root {
+  --bg: #F4FBF9;
+  --bg2: #f3f0eb;
+  --white: #ffffff;
+  --ink: #1c1917;
+  --ink2: #3d3530;
+  --muted: #7a6f68;
+  --lighter: #a89e97;
+  --border: #e8e2da;
+  --border2: #d4ccc2;
+  --rose: #6893a6;
+  --rose-dark: #0d4e69;
+  --rose-soft: #f5e8e9;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -webkit-touch-callout: none;
+}
+
+/* Make entire website non-copyable */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Disable right-click context menu */
+
+/* body {-webkit-touch-callout: none;} */
+
+/* Allow selection in input fields (for forms) */
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+/* ── Container ── */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: #6893a6;
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.82;
+  background: #0d4e69;
+}
+
+.btn-rose {
+  background: var(--rose);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-rose:hover {
+  background: var(--rose-dark);
+}
+
+.btn-ghost {
+  background: none;
+  border: 1.5px solid var(--border2);
+  border-radius: 4px;
+  padding: 9px 22px;
+  font-size: 13.5px;
+  color: var(--ink2);
+  transition: border-color 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+
+/* ── Inputs ── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  background: var(--white);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--rose);
+}
+
+/* ── Spinner ── */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--rose);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 80px auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Messages ── */
+.msg-error {
+  background: #fff0f0;
+  border: 1px solid #f5c0c0;
+  color: #a33;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  margin-bottom: 14px;
+}
+
+.msg-success {
+  background: var(--rose-soft);
+  border: 1px solid #e8c0c4;
+  color: var(--rose-dark);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  margin-bottom: 14px;
+}
+
+/* ── Divider ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}

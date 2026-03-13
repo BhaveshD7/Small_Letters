@@ -1,0 +1,108 @@
+.series-page {
+  padding-top: 52px;
+  padding-bottom: 80px;
+  max-width: 860px;
+}
+
+.series-hero {
+  text-align: center;
+  margin-bottom: 52px;
+}
+.series-eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--rose);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.series-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 46px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+.series-tagline {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* Grid of 5 series cards */
+.series-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.series-card {
+  display: flex;
+  gap: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.series-card:hover { border-color: var(--rose); transform: translateY(-2px); text-decoration: none; }
+
+.series-card-num {
+  width: 72px;
+  flex-shrink: 0;
+  background: var(--rose-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--rose);
+  border-right: 1px solid #e8c4c8;
+}
+
+.series-card-body {
+  padding: 22px 24px;
+  flex: 1;
+}
+.series-card-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--lighter);
+  margin-bottom: 8px;
+}
+.series-card-body h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.series-card-desc {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+.series-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.series-count {
+  font-size: 12px;
+  color: var(--lighter);
+  font-weight: 500;
+}
+.series-read {
+  font-size: 12.5px;
+  color: var(--rose);
+  font-weight: 500;
+}

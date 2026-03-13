@@ -1,0 +1,437 @@
+/* ============================================
+   HOME PAGE - CLEAN VERSION
+   ============================================ */
+
+/* ============================================
+   TAGLINE
+   ============================================ */
+
+.home-tagline {
+  text-align: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-tagline p {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-style: italic;
+  color: #6893a6;
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+/* ============================================
+   GRID LAYOUT
+   ============================================ */
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 250px 1fr 270px;
+  padding-top: 28px;
+  padding-bottom: 60px;
+  align-items: start;
+  gap: 0;
+}
+
+.col-left {
+  padding-right: 24px;
+}
+
+.col-center {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0 28px;
+}
+
+.col-right {
+  padding-left: 24px;
+}
+
+/* ============================================
+   LEFT SIDEBAR - MAIN SERIES PROMO
+   ============================================ */
+
+.series-promo {
+  display: block;
+  background: #e7f1fb;
+  border-radius: 6px;
+  padding: 18px 16px;
+  margin-top: 28px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: all 0.2s;
+}
+
+.series-promo:hover {
+  box-shadow: 0 2px 8px rgba(104, 147, 166, 0.2);
+}
+
+.series-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--rose);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.series-promo h4 {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.series-promo p {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.series-cta {
+  font-size: 12px;
+  color: var(--rose);
+  font-weight: 500;
+}
+
+/* ============================================
+   DYNAMIC SERIES LIST
+   ============================================ */
+
+.dynamic-series-list {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.series-list-header {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+
+.dynamic-series-item {
+  display: block;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+
+.dynamic-series-item:hover {
+  border-color: var(--rose);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateX(2px);
+}
+
+.series-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.series-item-name {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.series-item-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--rose);
+  background: rgba(var(--rose-rgb, 234, 102, 126), 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.series-item-latest {
+  font-size: 11px;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   CENTER - FEATURED POSTS
+   ============================================ */
+
+.featured-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #6893a6;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+/* ============================================
+   ALL POSTS GRID - 2 COLUMNS
+   ============================================ */
+
+.all-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 columns */
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.grid-post-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s;
+  border: 1px solid #e5e7eb;
+}
+
+.grid-post-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  border-color: #6893a6;
+}
+
+.grid-post-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  display: block;
+  background: #f3f4f6;
+}
+
+.grid-post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.grid-post-card:hover .grid-post-image img {
+  transform: scale(1.05);
+}
+
+.grid-post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.grid-post-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  /* Slightly bigger for 2 columns */
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grid-post-title:hover {
+  color: #6893a6;
+}
+
+.grid-post-subtitle {
+  font-size: 15px;
+  /* Slightly bigger for 2 columns */
+  color: var(--muted);
+  line-height: 1.5;
+  font-style: italic;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grid-post-meta {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--lighter);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Responsive - 1 column on mobile */
+@media (max-width: 768px) {
+  .all-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-post-title {
+    font-size: 18px;
+  }
+
+  .grid-post-subtitle {
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   RIGHT SIDEBAR
+   ============================================ */
+
+.sidebar-head {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #6893a6;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.sidebar-divider {
+  border-top: 1px solid var(--border);
+  margin: 22px 0;
+}
+
+.sidebar-empty {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  padding: 10px 0;
+}
+
+/* ============================================
+   RIGHT SIDEBAR - TYPE FILTERS
+   ============================================ */
+
+.type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.type-chip {
+  display: inline-block;
+  padding: 5px 13px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.type-chip:hover {
+  border-color: var(--rose);
+  color: var(--rose);
+  text-decoration: none;
+}
+
+/* ============================================
+   RIGHT SIDEBAR - SUBSCRIBE CARD
+   ============================================ */
+
+.sidebar-subscribe {
+  background: #e7f1fb;
+  border: none;
+  border-radius: 8px;
+  padding: 20px 16px;
+}
+
+.sidebar-subscribe-hed {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.sidebar-subscribe-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 14px 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    padding-top: 20px;
+  }
+
+  .col-left,
+  .col-right {
+    display: none;
+  }
+
+  .col-center {
+    border: none;
+    padding: 0;
+  }
+
+  .all-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .featured-posts {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-tagline p {
+    font-size: 14px;
+  }
+
+  .grid-post-title {
+    font-size: 16px;
+  }
+
+  .grid-post-subtitle {
+    font-size: 12px;
+  }
+}
