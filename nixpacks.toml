@@ -3,7 +3,7 @@ nixPkgs = ['nodejs-18_x']
 
 [phases.install]
 cmds = [
-  'npm install --prefix frontend',
+  'npm install --prefix frontend --include=dev',
   'npm install --prefix backend'
 ]
 
