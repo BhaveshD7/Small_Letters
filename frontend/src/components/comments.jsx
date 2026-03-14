@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import './Comments.css'
+import './comments.css'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
