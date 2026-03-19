@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import { toggleFeatured } from '../api/posts'
 import './AdminPosts.css'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
-const getAuthHeader = () => ({
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-})
 
 export default function AdminPosts() {
     const navigate = useNavigate()
@@ -29,10 +23,7 @@ export default function AdminPosts() {
     const loadPosts = async () => {
         try {
             setLoading(true)
-            const res = await axios.get(
-                `${API_URL}/api/posts/admin/all-posts?page=${currentPage}&limit=20&status=${status}`,
-                getAuthHeader()
-            )
+            const res = await api.get(`/posts/admin/all-posts?page=${currentPage}&limit=20&status=${status}`)
 
             setPosts(res.data.posts)
             setTotalPages(res.data.pages)
@@ -82,9 +73,7 @@ export default function AdminPosts() {
 
         try {
             await Promise.all(
-                selectedPosts.map(id =>
-                    axios.delete(`${API_URL}/api/posts/${id}`, getAuthHeader())
-                )
+                selectedPosts.map(id => api.delete(`/posts/${id}`))
             )
             setSelectedPosts([])
             loadPosts()
@@ -97,13 +86,7 @@ export default function AdminPosts() {
     const bulkPublish = async () => {
         try {
             await Promise.all(
-                selectedPosts.map(id =>
-                    axios.put(
-                        `${API_URL}/api/posts/${id}`,
-                        { isPublished: true },
-                        getAuthHeader()
-                    )
-                )
+                selectedPosts.map(id => api.put(`/posts/${id}`, { isPublished: true }))
             )
             setSelectedPosts([])
             loadPosts()
@@ -116,13 +99,7 @@ export default function AdminPosts() {
     const bulkUnpublish = async () => {
         try {
             await Promise.all(
-                selectedPosts.map(id =>
-                    axios.put(
-                        `${API_URL}/api/posts/${id}`,
-                        { isPublished: false },
-                        getAuthHeader()
-                    )
-                )
+                selectedPosts.map(id => api.put(`/posts/${id}`, { isPublished: false }))
             )
             setSelectedPosts([])
             loadPosts()
@@ -136,7 +113,7 @@ export default function AdminPosts() {
         if (!confirm('Delete this post? This cannot be undone.')) return
 
         try {
-            await axios.delete(`${API_URL}/api/posts/${id}`, getAuthHeader())
+            await api.delete(`/posts/${id}`)
             loadPosts()
         } catch (error) {
             console.error('Delete error:', error)
@@ -169,7 +146,6 @@ export default function AdminPosts() {
     return (
         <div className="admin-posts">
 
-            {/* Header */}
             <div className="posts-header">
                 <div>
                     <button className="btn-back" onClick={() => navigate('/admin/dashboard')}>
@@ -183,7 +159,6 @@ export default function AdminPosts() {
                 </button>
             </div>
 
-            {/* Filters */}
             <div className="posts-filters">
                 <div className="filter-tabs">
                     <button
@@ -215,7 +190,6 @@ export default function AdminPosts() {
                 />
             </div>
 
-            {/* Bulk Actions */}
             {selectedPosts.length > 0 && (
                 <div className="bulk-actions">
                     <span className="selected-count">
@@ -235,7 +209,6 @@ export default function AdminPosts() {
                 </div>
             )}
 
-            {/* Posts Table */}
             <div className="posts-table-container">
                 <table className="posts-table">
                     <thead>
@@ -321,7 +294,6 @@ export default function AdminPosts() {
                 </table>
             </div>
 
-            {/* Empty State */}
             {filteredPosts.length === 0 && (
                 <div className="empty-state">
                     <p>No posts found</p>
@@ -331,7 +303,6 @@ export default function AdminPosts() {
                 </div>
             )}
 
-            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="pagination">
                     <button

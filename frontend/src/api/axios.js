@@ -17,12 +17,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// Attach JWT token to every request if present
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
 
 // Handle 401 globally (token expired)
 api.interceptors.response.use(

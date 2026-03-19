@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import axios from 'axios'
+import api from '../api/axios'
 import './UserDashboard.css'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
-const getAuthHeader = () => ({
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-})
 
 export default function UserDashboard() {
     const { user, logout } = useAuth()
@@ -31,9 +25,9 @@ export default function UserDashboard() {
         try {
             setLoading(true)
             const [likedRes, savedRes, commentsRes] = await Promise.all([
-                axios.get(`${API_URL}/api/interactions/liked`, getAuthHeader()),
-                axios.get(`${API_URL}/api/interactions/saved`, getAuthHeader()),
-                axios.get(`${API_URL}/api/comments/user/my-comments`, getAuthHeader()),
+                api.get('/interactions/liked'),
+                api.get('/interactions/saved'),
+                api.get('/comments/user/my-comments'),
             ])
 
             setLikedPosts(likedRes.data.posts)
@@ -72,7 +66,6 @@ export default function UserDashboard() {
     return (
         <div className="user-dashboard">
 
-            {/* Header */}
             <div className="dashboard-header">
                 <div className="user-profile">
                     <div className="user-avatar-large">
@@ -105,7 +98,6 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            {/* Stats */}
             <div className="user-stats">
                 <div className="stat-item">
                     <div className="stat-value">{likedPosts.length}</div>
@@ -121,7 +113,6 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            {/* Tabs */}
             <div className="dashboard-tabs">
                 <button
                     className={`tab ${activeTab === 'liked' ? 'active' : ''}`}
@@ -143,10 +134,8 @@ export default function UserDashboard() {
                 </button>
             </div>
 
-            {/* Content */}
             <div className="dashboard-content">
 
-                {/* Liked Posts */}
                 {activeTab === 'liked' && (
                     <div className="posts-grid">
                         {likedPosts.length > 0 ? (
@@ -190,7 +179,6 @@ export default function UserDashboard() {
                     </div>
                 )}
 
-                {/* Saved Posts */}
                 {activeTab === 'saved' && (
                     <div className="posts-grid">
                         {savedPosts.length > 0 ? (
@@ -234,7 +222,6 @@ export default function UserDashboard() {
                     </div>
                 )}
 
-                {/* My Comments */}
                 {activeTab === 'comments' && (
                     <div className="comments-list-dashboard">
                         {myComments.length > 0 ? (

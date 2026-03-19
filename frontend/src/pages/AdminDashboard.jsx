@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import './AdminDashboard.css'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
-const getAuthHeader = () => ({
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-})
 
 export default function AdminDashboard() {
     const navigate = useNavigate()
@@ -24,11 +18,10 @@ export default function AdminDashboard() {
         try {
             setLoading(true)
 
-            // Fetch all data in parallel
             const [statsRes, popularRes, activityRes] = await Promise.all([
-                axios.get(`${API_URL}/api/posts/admin/stats`, getAuthHeader()),
-                axios.get(`${API_URL}/api/posts/admin/popular?limit=5`, getAuthHeader()),
-                axios.get(`${API_URL}/api/posts/admin/activity?limit=10`, getAuthHeader()),
+                api.get('/posts/admin/stats'),
+                api.get('/posts/admin/popular?limit=5'),
+                api.get('/posts/admin/activity?limit=10'),
             ])
 
             setStats(statsRes.data.stats)
@@ -84,7 +77,7 @@ export default function AdminDashboard() {
             {/* Stats Cards */}
             <div className="stats-grid">
                 <div className="stat-card">
-                    <div className="stat-icon"></div>
+                    <div className="stat-icon">📝</div>
                     <div className="stat-content">
                         <div className="stat-value">{stats?.totalPosts || 0}</div>
                         <div className="stat-label">Published Posts</div>
@@ -213,7 +206,6 @@ export default function AdminDashboard() {
                         className="action-btn"
                         onClick={() => navigate('/admin/write')}
                     >
-                        {/* <span className="action-icon">✍️</span> */}
                         <span className="action-label">Write New Post</span>
                     </button>
 
@@ -221,7 +213,6 @@ export default function AdminDashboard() {
                         className="action-btn"
                         onClick={() => navigate('/admin/posts')}
                     >
-                        {/* <span className="action-icon">📝</span> */}
                         <span className="action-label">Manage Posts</span>
                     </button>
 
@@ -229,7 +220,6 @@ export default function AdminDashboard() {
                         className="action-btn"
                         onClick={() => navigate('/admin/media')}
                     >
-                        {/* <span className="action-icon">🖼️</span> */}
                         <span className="action-label">Media Library</span>
                     </button>
 
@@ -237,7 +227,6 @@ export default function AdminDashboard() {
                         className="action-btn"
                         onClick={() => navigate('/series')}
                     >
-                        {/* <span className="action-icon">📚</span> */}
                         <span className="action-label">View Series</span>
                     </button>
                 </div>

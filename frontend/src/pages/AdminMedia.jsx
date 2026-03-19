@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import { useDropzone } from 'react-dropzone'
 import './AdminMedia.css'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
-const getAuthHeader = () => ({
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-})
 
 export default function AdminMedia() {
     const navigate = useNavigate()
@@ -17,7 +11,7 @@ export default function AdminMedia() {
     const [loading, setLoading] = useState(true)
     const [uploading, setUploading] = useState(false)
     const [selectedImage, setSelectedImage] = useState(null)
-    const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+    const [viewMode, setViewMode] = useState('grid')
     const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
@@ -28,8 +22,8 @@ export default function AdminMedia() {
         try {
             setLoading(true)
             const [imagesRes, storageRes] = await Promise.all([
-                axios.get(`${API_URL}/api/media/images`, getAuthHeader()),
-                axios.get(`${API_URL}/api/media/storage`, getAuthHeader()),
+                api.get('/media/images'),
+                api.get('/media/storage'),
             ])
 
             setImages(imagesRes.data.images)
@@ -53,20 +47,14 @@ export default function AdminMedia() {
 
         try {
             setUploading(true)
-            const token = localStorage.getItem('token')
-
-            const res = await fetch(`${API_URL}/api/upload/image`, {
-                method: 'POST',
-                body: formData,
+            const res = await api.post('/upload/image', formData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                },
+                    'Content-Type': 'multipart/form-data'
+                }
             })
 
-            const data = await res.json()
-
-            if (data.success) {
-                loadMediaData() // Reload to show new image
+            if (res.data.success) {
+                loadMediaData()
             }
         } catch (err) {
             console.error('Upload error:', err)
@@ -86,7 +74,7 @@ export default function AdminMedia() {
 
         try {
             const encodedId = encodeURIComponent(publicId)
-            await axios.delete(`${API_URL}/api/media/images/${encodedId}`, getAuthHeader())
+            await api.delete(`/media/images/${encodedId}`)
             loadMediaData()
         } catch (error) {
             console.error('Delete error:', error)
@@ -124,7 +112,6 @@ export default function AdminMedia() {
     return (
         <div className="admin-media">
 
-            {/* Header */}
             <div className="media-header">
                 <div>
                     <button className="btn-back" onClick={() => navigate('/admin/dashboard')}>
@@ -135,7 +122,6 @@ export default function AdminMedia() {
                 </div>
             </div>
 
-            {/* Storage Stats */}
             {storageStats && (
                 <div className="storage-card">
                     <div className="storage-info">
@@ -152,7 +138,6 @@ export default function AdminMedia() {
                 </div>
             )}
 
-            {/* Upload Area */}
             <div className="upload-section">
                 <div {...getRootProps()} className={`dropzone-large ${isDragActive ? 'active' : ''}`}>
                     <input {...getInputProps()} />
@@ -172,7 +157,6 @@ export default function AdminMedia() {
                 </div>
             </div>
 
-            {/* Toolbar */}
             <div className="media-toolbar">
                 <div className="toolbar-left">
                     <input
@@ -201,7 +185,6 @@ export default function AdminMedia() {
                 </div>
             </div>
 
-            {/* Images Grid/List */}
             {filteredImages.length > 0 ? (
                 <div className={`media-${viewMode}`}>
                     {filteredImages.map((img) => (
@@ -251,7 +234,6 @@ export default function AdminMedia() {
                 </div>
             )}
 
-            {/* Image Detail Modal */}
             {selectedImage && (
                 <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>

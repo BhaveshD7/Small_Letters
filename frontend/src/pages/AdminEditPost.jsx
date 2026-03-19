@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import { useDropzone } from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import './AdminWrite.css' // Reuse same styles
+import './AdminWrite.css'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 const POST_TYPES = ['essay', 'quote', 'phrase', 'paragraph', 'series']
 
 export default function AdminEditPost() {
@@ -37,11 +36,9 @@ export default function AdminEditPost() {
     const [uploadProgress, setUploadProgress] = useState(0)
     const [showPreview, setShowPreview] = useState(false)
 
-    // Series management state
     const [seriesMode, setSeriesMode] = useState('existing')
     const [newSeriesName, setNewSeriesName] = useState('')
 
-    // Load post data
     useEffect(() => {
         loadPost()
     }, [postId])
@@ -49,11 +46,7 @@ export default function AdminEditPost() {
     const loadPost = async () => {
         try {
             setLoading(true)
-            const res = await axios.get(`${API_URL}/api/posts/id/${postId}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const res = await api.get(`/posts/id/${postId}`)
 
             const post = res.data.post
             setForm({
@@ -76,7 +69,6 @@ export default function AdminEditPost() {
                 setImagePreview(post.cover_image)
             }
 
-            // Set series mode based on existing series
             if (post.series) {
                 const existingSeries = ['love-in-small-letters-i', 'love-in-small-letters-ii', 'love-in-small-letters-iii', 'love-in-small-letters-iv', 'love-in-small-letters-v']
                 if (existingSeries.includes(post.series)) {
@@ -99,7 +91,6 @@ export default function AdminEditPost() {
         setForm({ ...form, [name]: type === 'checkbox' ? checked : value })
     }
 
-    // Image upload
     const onDrop = async (acceptedFiles) => {
         const file = acceptedFiles[0]
         if (!file) return
@@ -113,16 +104,13 @@ export default function AdminEditPost() {
 
         try {
             setUploadProgress(0)
-            const res = await fetch(`${API_URL}/api/upload/image`, {
-                method: 'POST',
-                body: formData,
+            const res = await api.post('/upload/image', formData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Content-Type': 'multipart/form-data'
                 }
             })
 
-            const data = await res.json()
-            setForm({ ...form, coverImage: data.url })
+            setForm({ ...form, coverImage: res.data.url })
             setUploadProgress(100)
         } catch (err) {
             setError('Failed to upload image')
@@ -152,11 +140,7 @@ export default function AdminEditPost() {
                 seriesPosition: form.seriesPosition ? parseInt(form.seriesPosition) : null,
             }
 
-            await axios.put(`${API_URL}/api/posts/${postId}`, payload, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            await api.put(`/posts/${postId}`, payload)
 
             setSuccess('Post updated successfully!')
             setTimeout(() => navigate('/admin/posts'), 1500)
@@ -171,17 +155,6 @@ export default function AdminEditPost() {
         const wordsPerMinute = 200
         const words = form.body.replace(/<[^>]*>/g, '').split(/\s+/).length
         return Math.ceil(words / wordsPerMinute)
-    }
-
-    const getSeriesTitle = (slug) => {
-        const titles = {
-            'love-in-small-letters-i': 'Hidden Gestures',
-            'love-in-small-letters-ii': 'Comfortable Silence',
-            'love-in-small-letters-iii': 'Little Things That Nobody Else Notices',
-            'love-in-small-letters-iv': 'The Weight of Almost',
-            'love-in-small-letters-v': "Love Isn't Butterflies"
-        }
-        return titles[slug] || slug
     }
 
     if (loading) {
@@ -214,7 +187,6 @@ export default function AdminEditPost() {
                 <div className="admin-form-panel">
                     <form id="edit-form" onSubmit={handleSubmit} className="admin-form">
 
-                        {/* POST SETTINGS */}
                         <div className="form-section">
                             <h3>Post Settings</h3>
 
@@ -234,10 +206,8 @@ export default function AdminEditPost() {
                                 </div>
                             </div>
 
-                            {/* SERIES SECTION */}
                             {form.postType === 'series' && (
                                 <div className="series-section">
-
                                     <div className="field">
                                         <label>Series Management</label>
                                         <div className="series-choice">
@@ -321,7 +291,6 @@ export default function AdminEditPost() {
                             )}
                         </div>
 
-                        {/* CONTENT */}
                         <div className="form-section">
                             <h3>Content</h3>
                             <div className="field">
@@ -347,7 +316,6 @@ export default function AdminEditPost() {
                             </div>
                         </div>
 
-                        {/* COVER IMAGE */}
                         <div className="form-section">
                             <h3>Cover Image</h3>
                             <div className="image-upload-area">
@@ -402,7 +370,6 @@ export default function AdminEditPost() {
                             </div>
                         </div>
 
-                        {/* BODY */}
                         <div className="form-section">
                             <h3>Post Body *</h3>
                             <textarea
@@ -420,7 +387,6 @@ export default function AdminEditPost() {
                             </div>
                         </div>
 
-                        {/* TAGS */}
                         <div className="form-section">
                             <h3>Tags</h3>
                             <div className="field">
@@ -435,7 +401,6 @@ export default function AdminEditPost() {
                             </div>
                         </div>
 
-                        {/* SEO */}
                         <div className="form-section collapsible">
                             <h3>SEO Settings (Optional)</h3>
                             <div className="field">
@@ -461,7 +426,6 @@ export default function AdminEditPost() {
                             </div>
                         </div>
 
-                        {/* PUBLISHING */}
                         <div className="form-section">
                             <h3>Publishing Options</h3>
 
@@ -494,7 +458,6 @@ export default function AdminEditPost() {
                     </form>
                 </div>
 
-                {/* PREVIEW */}
                 {showPreview && (
                     <div className="admin-preview-panel">
                         <div className="preview-header">

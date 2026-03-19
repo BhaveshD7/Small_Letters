@@ -3,8 +3,8 @@ import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './comments.css'
+import api from '../api/axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const getAuthHeader = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -24,7 +24,7 @@ export default function Comments({ postId }) {
     const loadComments = async () => {
         try {
             setLoading(true)
-            const res = await axios.get(`${API_URL}/api/comments/post/${postId}`)
+            const res = await api.get(`/comments/post/${postId}`)
             setComments(res.data.comments)
         } catch (error) {
             console.error('Load comments error:', error)
