@@ -138,15 +138,15 @@ export default function Post() {
       </div>
 
       {/* Hero image */}
-      {post.coverImage && (
-        <div className="post-cover-container">
-          <img
+      {/* {post.coverImage && ( */}
+      {/* // <div className="post-cover-container"> */}
+      {/* <img
             src={post.coverImage}
             alt={post.title}
             className="post-cover"
-          />
-        </div>
-      )}
+          /> */}
+      {/* </div> */}
+      {/* )} */}
 
       {/* Body */}
       {showPaywall ? (
