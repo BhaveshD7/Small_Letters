@@ -163,14 +163,71 @@ const formatSeriesName = (slug) => {
     .join(' ');
 };
 
+// const getSeriesPosts = async (req, res) => {
+//   try {
+//     const posts = await Post.findBySeries(req.params.seriesSlug);
+//     if (!posts.length) {
+//       return res.status(404).json({ success: false, message: 'Series not found or has no posts yet' });
+//     }
+//     res.status(200).json({ success: true, count: posts.length, posts });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
 const getSeriesPosts = async (req, res) => {
   try {
-    const posts = await Post.findBySeries(req.params.seriesSlug);
-    if (!posts.length) {
-      return res.status(404).json({ success: false, message: 'Series not found or has no posts yet' });
+    const result = await pool.query(
+      `SELECT p.*, 
+              u.name as author_name, 
+              u.avatar as author_avatar
+       FROM posts p
+       LEFT JOIN users u ON p.author_id = u.id
+       WHERE p.series = $1 AND p.is_published = true
+       ORDER BY p.series_position ASC`,
+      [req.params.seriesSlug]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Series not found or has no posts yet'
+      });
     }
-    res.status(200).json({ success: true, count: posts.length, posts });
+
+    const posts = result.rows.map(row => ({
+      _id: row.id,
+      id: row.id,
+      title: row.title,
+      subtitle: row.subtitle,
+      slug: row.slug,
+      body: row.body,
+      coverImage: row.cover_image,
+      series: row.series,
+      seriesPosition: row.series_position,
+      postType: row.post_type,
+      isPublished: row.is_published,
+      isPremium: row.is_premium,
+      publishedAt: row.published_at,
+      likes: row.likes,
+      views: row.views,
+      saves: row.saves,
+      tags: row.tags,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      author: {
+        name: row.author_name,
+        avatar: row.author_avatar
+      }
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      posts
+    });
   } catch (error) {
+    console.error('getSeriesPosts error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
