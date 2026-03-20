@@ -101,6 +101,32 @@ const getPopularPosts = async (req, res) => {
   }
 };
 
+// const getAllSeries = async (req, res) => {
+//   try {
+//     const result = await pool.query(`
+//       SELECT 
+//         series,
+//         COUNT(*) as posts_count,
+//         MAX(series_position) as total_parts
+//       FROM posts 
+//       WHERE series IS NOT NULL 
+//       GROUP BY series
+//       ORDER BY series
+//     `);
+
+//     const series = result.rows.map(row => ({
+//       slug: row.series,
+//       name: formatSeriesName(row.series),
+//       postsCount: parseInt(row.posts_count),
+//       totalParts: parseInt(row.total_parts) || 5
+//     }));
+
+//     res.status(200).json({ success: true, series });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
 const getAllSeries = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -110,19 +136,22 @@ const getAllSeries = async (req, res) => {
         MAX(series_position) as total_parts
       FROM posts 
       WHERE series IS NOT NULL 
+        AND series != ''
+        AND is_published = true
       GROUP BY series
       ORDER BY series
     `);
 
     const series = result.rows.map(row => ({
-      slug: row.series,
+      seriesSlug: row.series,  // Changed from 'slug' to 'seriesSlug'
       name: formatSeriesName(row.series),
-      postsCount: parseInt(row.posts_count),
+      count: parseInt(row.posts_count),  // Changed from 'postsCount' to 'count'
       totalParts: parseInt(row.total_parts) || 5
     }));
 
     res.status(200).json({ success: true, series });
   } catch (error) {
+    console.error('getAllSeries error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
