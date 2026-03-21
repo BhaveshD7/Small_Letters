@@ -51,7 +51,7 @@
 }
 
 .avatar-placeholder {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0d4e69;
     color: white;
     display: flex;
     align-items: center;
@@ -102,7 +102,7 @@
 .btn-cancel {
     background: white;
     border: 2px solid #e5e7eb;
-    color: #6b7280;
+    color: #0d4e69;
 }
 
 .btn-cancel:hover:not(:disabled) {
@@ -116,7 +116,7 @@
 }
 
 .btn-submit {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0d4e69;
     border: none;
     color: white;
 }
