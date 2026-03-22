@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import './Auth.css'
 
 export default function ForgotPassword() {
@@ -14,21 +14,10 @@ export default function ForgotPassword() {
         setLoading(true)
         setError('')
 
-        console.log('Submitting forgot password for:', email);
-        console.log('API URL:', import.meta.env.VITE_API_URL);
-
         try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/forgot-password`,
-                { email }
-            );
-
-            console.log('Response:', response.data);
+            const response = await api.post('/auth/forgot-password', { email });
             setSuccess(true)
         } catch (err) {
-            console.error('Error:', err);
-            console.error('Response:', err.response?.data);
-
             setError(err.response?.data?.message || 'Failed to send reset email. Please try again.')
         } finally {
             setLoading(false)
@@ -37,18 +26,14 @@ export default function ForgotPassword() {
 
     if (success) {
         return (
-            <div className="auth-page container">
-                <div className="auth-card">
-                    <Link to="/" ><div className="auth-logo">Small Letter</div></Link>
+            <div className="auth-page">
+                <div className="auth-form-wrapper">
+                    <Link to="/" className="auth-logo">Small Letter</Link>
                     <h3>Check your email</h3>
                     <p className="auth-sub">
                         We've sent a password reset link to <strong>{email}</strong>
                     </p>
-                    <Link
-                        to="/signin"
-                        className="btn-primary auth-btn"
-                        style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
-                    >
+                    <Link to="/signin" className="btn-primary auth-btn">
                         Back to Sign in
                     </Link>
                 </div>
@@ -57,8 +42,8 @@ export default function ForgotPassword() {
     }
 
     return (
-        <div className="auth-page container">
-            <div className="auth-card">
+        <div className="auth-page">
+            <div className="auth-form-wrapper">
                 <div className="auth-logo">Small Letter</div>
                 <h3>Reset password</h3>
                 <p className="auth-sub">
@@ -69,8 +54,10 @@ export default function ForgotPassword() {
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="field">
-                        <label>Email</label>
+                        <label htmlFor="email">Email</label>
                         <input
+                            id="email"
+                            name="email"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}

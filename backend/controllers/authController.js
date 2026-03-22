@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const pool = require('../config/db');
 const { sendEmail, emailTemplates } = require('../utils/emailService');
+const crypto = require('crypto');
 const User = require('../models/User');
 
 const generateToken = (userId) => {
@@ -90,63 +93,63 @@ const getMe = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log('🔵 Step 1: Forgot password requested for:', email);
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      console.log('❌ Step 2: Invalid email format');
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid email address'
-      });
-    }
-    console.log('✅ Step 2: Email format valid');
+    // Find user
+    const result = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
 
-    // Check if user exists
-    console.log('🔵 Step 3: Looking up user in database...');
-    const user = await User.findByEmail(email);
-    console.log('✅ Step 4: User lookup result:', user ? `Found: ${user.name}` : 'Not found');
-
-    if (!user) {
-      console.log('⚠️ User not found, sending generic success message');
-      return res.status(200).json({
+    if (result.rows.length === 0) {
+      // Don't reveal if user exists
+      return res.json({
         success: true,
-        message: 'If an account with that email exists, a reset link has been sent.'
+        message: 'If that email exists, a password reset link has been sent.'
       });
     }
+
+    const user = result.rows[0];
 
     // Generate reset token
-    console.log('🔵 Step 5: Generating reset token...');
-    const resetToken = await User.createPasswordResetToken(email);
-    console.log('✅ Step 6: Token generated:', resetToken.substring(0, 15) + '...');
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    // Token expires in 1 hour
+    const resetTokenExpiry = new Date(Date.now() + 3600000);
+
+    // Save to database
+    await pool.query(
+      `UPDATE users 
+       SET reset_password_token = $1, 
+           reset_password_expires = $2 
+       WHERE id = $3`,
+      [resetTokenHash, resetTokenExpiry, user.id]
+    );
 
     // Create reset URL
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    console.log('🔵 Step 7: Reset URL created:', resetUrl);
+
+    // Get email template
+    const { subject, html, text } = emailTemplates.passwordReset(resetUrl, user.name);
 
     // Send email
-    console.log('🔵 Step 8: Preparing to send email...');
-    const emailContent = emailTemplates.passwordReset(resetUrl, user.name);
-
-    console.log('🔵 Step 9: Calling sendEmail function...');
     await sendEmail({
-      to: email,
-      subject: emailContent.subject,
-      html: emailContent.html,
-      text: emailContent.text,
+      to: user.email,
+      subject,
+      html,
+      text
     });
-    console.log('✅ Step 10: Email sent successfully!');
 
-    res.status(200).json({
+    res.json({
       success: true,
-      message: 'Password reset email sent!'
+      message: 'Password reset email sent. Check your inbox.'
     });
 
   } catch (error) {
-    console.error('❌❌❌ FORGOT PASSWORD ERROR ❌❌❌');
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
+    console.error('Forgot password error:', error);
     res.status(500).json({
       success: false,
       message: 'Error sending password reset email. Please try again.'
@@ -158,28 +161,59 @@ const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
-    // Validate password
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    if (!passwordRegex.test(password)) {
+    if (!password || password.length < 6) {
       return res.status(400).json({
         success: false,
-        message: 'Password must be 8+ characters with uppercase, lowercase, number, and special character'
+        message: 'Password must be at least 6 characters'
       });
     }
 
-    // Reset password
-    await User.resetPassword(token, password);
+    // Hash the token from URL
+    const resetTokenHash = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
 
-    res.status(200).json({
+    // Find user with valid token
+    const result = await pool.query(
+      `SELECT * FROM users 
+       WHERE reset_password_token = $1 
+       AND reset_password_expires > $2`,
+      [resetTokenHash, new Date()]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired reset token'
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update password and clear reset token
+    await pool.query(
+      `UPDATE users 
+       SET password = $1,
+           reset_password_token = NULL,
+           reset_password_expires = NULL
+       WHERE id = $2`,
+      [hashedPassword, user.id]
+    );
+
+    res.json({
       success: true,
-      message: 'Password reset successful! You can now log in.'
+      message: 'Password reset successful. You can now sign in.'
     });
 
   } catch (error) {
     console.error('Reset password error:', error);
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message || 'Invalid or expired reset token'
+      message: 'Error resetting password'
     });
   }
 };
