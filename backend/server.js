@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const pool = require('./config/db');
 const initDB = require('./config/initDB');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.use('/api/interactions', require('./routes/interactions'));
 
 // Static files
 app.use('/uploads', express.static('uploads'));
+
+app.use('/api/auth', authRoutes);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
