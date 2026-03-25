@@ -21,31 +21,25 @@ router.get('/me', protect, getMe);
 router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:token', resetPassword);
 
-// TEST EMAIL - Remove after debugging
+// TEST EMAIL - at the BOTTOM of the file
 router.post('/test-email', async (req, res) => {
     try {
-        const { sendEmail } = require('../utils/emailService');
+        const { sendEmail } = require('../utils/emailServiceResend');
 
-        console.log('=== EMAIL CONFIG ===');
-        console.log('EMAIL_SERVICE:', process.env.EMAIL_SERVICE);
-        console.log('EMAIL_USER:', process.env.EMAIL_USER);
-        console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'SET (length: ' + process.env.EMAIL_PASSWORD.length + ')' : 'NOT SET');
-        console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
+        console.log('=== TEST EMAIL ENDPOINT HIT ===');
+        console.log('RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
 
         const result = await sendEmail({
             to: 'whatf.ever0719@gmail.com',
             subject: 'Test Email - Small Letters',
-            html: '<h1>Email Works!</h1><p>Your email configuration is correct.</p>',
+            html: '<h1>Email Works!</h1>',
             text: 'Email works!'
         });
 
-        console.log('Email sent successfully:', result);
+        console.log('Email sent:', result);
         res.json({ success: true, result });
     } catch (error) {
-        console.error('=== EMAIL ERROR ===');
-        console.error('Message:', error.message);
-        console.error('Code:', error.code);
-        console.error('Response:', error.response);
+        console.error('TEST EMAIL ERROR:', error);
         res.status(500).json({
             success: false,
             error: error.message,
@@ -53,5 +47,17 @@ router.post('/test-email', async (req, res) => {
         });
     }
 });
-
+// SIMPLE TEST - No email, just check if route works
+router.get('/ping', (req, res) => {
+    console.log('PING endpoint hit');
+    res.json({
+        success: true,
+        message: 'Pong!',
+        env: {
+            hasResendKey: !!process.env.RESEND_API_KEY,
+            hasFrontendUrl: !!process.env.FRONTEND_URL,
+            nodeEnv: process.env.NODE_ENV
+        }
+    });
+});
 module.exports = router;
