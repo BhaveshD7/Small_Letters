@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const pool = require('../config/db');
-const { sendEmail, emailTemplates } = require('../utils/emailService');
+// const { sendEmail, emailTemplates } = require('../utils/emailService');
+const { sendEmail, emailTemplates } = require('../utils/emailServiceResend');
 const crypto = require('crypto');
 const User = require('../models/User');
 
@@ -10,50 +11,6 @@ const generateToken = (userId) => {
     expiresIn: process.env.JWT_EXPIRE || '7d',
   });
 };
-
-// const register = async (req, res) => {
-//   try {
-//     const { name, email, password } = req.body;
-
-//     // Validate password strength
-//     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-//     if (!passwordRegex.test(password)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: 'Password must be 8+ characters with uppercase, lowercase, number, and special character'
-//       });
-//     }
-
-//     const existingUser = await User.findByEmail(email);
-//     if (existingUser) {
-//       return res.status(400).json({ success: false, message: 'User already exists' });
-//     }
-
-//     const user = await User.create({ name, email, password });
-//     const token = generateToken(user.id);
-
-//     // Send welcome email (don't fail registration if email fails)
-//     try {
-//       const emailContent = emailTemplates.welcome(name);
-//       await sendEmail({
-//         to: email,
-//         subject: emailContent.subject,
-//         html: emailContent.html,
-//         text: emailContent.text,
-//       });
-//     } catch (emailError) {
-//       console.error('Welcome email error:', emailError);
-//     }
-
-//     res.status(201).json({
-//       success: true,
-//       token,
-//       user: { id: user.id, name: user.name, email: user.email, role: user.role },
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// };
 
 const register = async (req, res) => {
   try {
@@ -145,73 +102,6 @@ const getMe = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-// const forgotPassword = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-
-//     // Find user
-//     const result = await pool.query(
-//       'SELECT * FROM users WHERE email = $1',
-//       [email]
-//     );
-
-//     if (result.rows.length === 0) {
-//       // Don't reveal if user exists
-//       return res.json({
-//         success: true,
-//         message: 'If that email exists, a password reset link has been sent.'
-//       });
-//     }
-
-//     const user = result.rows[0];
-
-//     // Generate reset token
-//     const resetToken = crypto.randomBytes(32).toString('hex');
-//     const resetTokenHash = crypto
-//       .createHash('sha256')
-//       .update(resetToken)
-//       .digest('hex');
-
-//     // Token expires in 1 hour
-//     const resetTokenExpiry = new Date(Date.now() + 3600000);
-
-//     // Save to database
-//     await pool.query(
-//       `UPDATE users 
-//        SET reset_password_token = $1, 
-//            reset_password_expires = $2 
-//        WHERE id = $3`,
-//       [resetTokenHash, resetTokenExpiry, user.id]
-//     );
-
-//     // Create reset URL
-//     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-
-//     // Get email template
-//     const { subject, html, text } = emailTemplates.passwordReset(resetUrl, user.name);
-
-//     // Send email
-//     await sendEmail({
-//       to: user.email,
-//       subject,
-//       html,
-//       text
-//     });
-
-//     res.json({
-//       success: true,
-//       message: 'Password reset email sent. Check your inbox.'
-//     });
-
-//   } catch (error) {
-//     console.error('Forgot password error:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Error sending password reset email. Please try again.'
-//     });
-//   }
-// };
 
 const forgotPassword = async (req, res) => {
   try {
