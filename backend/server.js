@@ -4,7 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const pool = require('./config/db');
 const initDB = require('./config/initDB');
-const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -30,8 +29,6 @@ app.use('/api/interactions', require('./routes/interactions'));
 
 // Static files
 app.use('/uploads', express.static('uploads'));
-
-app.use('/api/auth', authRoutes);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
@@ -92,6 +89,16 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
+// Email service check
+let emailStatus = '✗ Not configured';
+if (process.env.RESEND_API_KEY) {
+  emailStatus = '✓ Resend';
+} else if (process.env.SENDGRID_API_KEY) {
+  emailStatus = '✓ SendGrid';
+} else if (process.env.EMAIL_PASSWORD) {
+  emailStatus = '✓ SMTP';
+}
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔════════════════════════════════════════════╗
@@ -101,7 +108,7 @@ app.listen(PORT, '0.0.0.0', () => {
 Environment: ${process.env.NODE_ENV || 'development'}
 Port:        ${PORT}
 Database:    ${process.env.DATABASE_URL ? '✓ Connected' : '✗ Not configured'}
-Email:       ${process.env.EMAIL_SERVICE || '✗ Not configured'}
+Email:       ${emailStatus}
 
 Local:       http://localhost:${PORT}
 Network:     http://192.168.1.5:${PORT}
