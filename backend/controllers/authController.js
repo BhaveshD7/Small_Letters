@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const pool = require('../config/db');
-const { sendEmail, emailTemplates } = require('../utils/emailService');
-// const { sendEmail, emailTemplates } = require('../utils/emailServiceResend');
+// const { sendEmail, emailTemplates } = require('../utils/emailService');
+const { sendEmail, emailTemplates } = require('../utils/emailServiceResend');
 const crypto = require('crypto');
 const User = require('../models/User');
 
