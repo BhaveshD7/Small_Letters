@@ -62,7 +62,7 @@ const emailTemplates = {
             </div>
             <p style="margin-top: 30px; font-size: 14px; color: #666;">
               Or copy this link:<br>
-              <a href="${resetLink}" style="color: #0d4e69; word-break: break-all;">${resetLink}</a>
+              <a href="${resetLink}" style="color: #ffffff; word-break: break-all;">${resetLink}</a>
             </p>
             <p style="font-size: 14px; color: #666;"><strong>Expires in 1 hour.</strong></p>
             <p style="font-size: 14px; color: #666;">If you didn't request this, ignore this email.</p>
