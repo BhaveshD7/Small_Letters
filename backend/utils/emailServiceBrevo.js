@@ -1,30 +1,35 @@
-const Brevo = require('@getbrevo/brevo');
-
-const apiInstance = new Brevo.TransactionalEmailsApi();
-apiInstance.setApiKey(
-    Brevo.TransactionalEmailsApiApiKeys.apiKey,
-    process.env.BREVO_API_KEY
-);
-
 const sendEmail = async ({ to, subject, html, text }) => {
     console.log('=== SENDING EMAIL WITH BREVO ===');
     console.log('To:', to);
     console.log('Subject:', subject);
 
-    const sendSmtpEmail = new Brevo.SendSmtpEmail();
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'api-key': process.env.BREVO_API_KEY,
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            sender: {
+                name: 'Small Letters',
+                email: process.env.BREVO_SENDER_EMAIL || 'smllletters@gmail.com'
+            },
+            to: [{ email: to }],
+            subject: subject,
+            htmlContent: html,
+            textContent: text
+        })
+    });
 
-    sendSmtpEmail.subject = subject;
-    sendSmtpEmail.htmlContent = html;
-    sendSmtpEmail.textContent = text;
-    sendSmtpEmail.sender = {
-        name: 'Small Letters',
-        email: process.env.BREVO_SENDER_EMAIL || 'smllletters@gmail.com'
-    };
-    sendSmtpEmail.to = [{ email: to }];
+    const data = await response.json();
+    console.log('Brevo response:', data);
 
-    const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log('Email sent successfully:', result.messageId);
-    return result;
+    if (!response.ok) {
+        throw new Error(data.message || 'Failed to send email');
+    }
+
+    return data;
 };
 
 const emailTemplates = {
