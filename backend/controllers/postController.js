@@ -307,23 +307,99 @@ const getPostBySlug = async (req, res) => {
 // ADMIN POST CRUD
 // ============================================
 
+// const createPost = async (req, res) => {
+//   try {
+//     const postData = {
+//       ...req.body,
+//       author_id: req.user.id,
+//       series: req.body.series || null,
+//       series_position: req.body.seriesPosition ? parseInt(req.body.seriesPosition) : null,
+//       post_type: req.body.postType || 'essay',
+//       is_premium: req.body.isPremium || false,
+//       is_published: req.body.isPublished || false,
+//       cover_image: req.body.coverImage || null,
+//       tags: req.body.tags || [],
+//     };
+
+//     const post = await Post.create(postData);
+//     res.status(201).json({ success: true, post });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
 const createPost = async (req, res) => {
   try {
-    const postData = {
-      ...req.body,
-      author_id: req.user.id,
-      series: req.body.series || null,
-      series_position: req.body.seriesPosition ? parseInt(req.body.seriesPosition) : null,
-      post_type: req.body.postType || 'essay',
-      is_premium: req.body.isPremium || false,
-      is_published: req.body.isPublished || false,
-      cover_image: req.body.coverImage || null,
-      tags: req.body.tags || [],
-    };
+    const {
+      title, subtitle, body, coverImage, postType,
+      series, seriesPosition, isPremium, isPublished,
+      tags, seoTitle, seoDescription
+    } = req.body;
 
-    const post = await Post.create(postData);
-    res.status(201).json({ success: true, post });
+    // Generate clean slug from title only
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+
+    // Check for duplicate slug
+    const existing = await pool.query(
+      'SELECT id FROM posts WHERE slug = $1', [slug]
+    );
+
+    const finalSlug = existing.rows.length > 0
+      ? `${slug}-${Date.now()}`
+      : slug;
+
+    const result = await pool.query(`
+      INSERT INTO posts (
+        title, subtitle, body, cover_image, post_type,
+        series, series_position, is_premium, is_published,
+        tags, seo_title, seo_description, slug,
+        author_id, published_at, created_at, updated_at
+      ) VALUES (
+        $1, $2, $3, $4, $5,
+        $6, $7, $8, $9,
+        $10, $11, $12, $13,
+        $14,
+        CASE WHEN $9 THEN CURRENT_TIMESTAMP ELSE NULL END,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      )
+      RETURNING *
+    `, [
+      title,
+      subtitle || null,
+      body,
+      coverImage || null,
+      postType || 'essay',
+      series || null,
+      seriesPosition ? parseInt(seriesPosition) : null,
+      isPremium || false,
+      isPublished || false,
+      tags || [],
+      seoTitle || null,
+      seoDescription || null,
+      finalSlug,
+      req.user.id
+    ]);
+
+    const row = result.rows[0];
+
+    res.status(201).json({
+      success: true,
+      post: {
+        id: row.id,
+        title: row.title,
+        slug: row.slug,
+        series: row.series,
+        seriesPosition: row.series_position,
+        isPublished: row.is_published,
+      }
+    });
   } catch (error) {
+    console.error('createPost error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

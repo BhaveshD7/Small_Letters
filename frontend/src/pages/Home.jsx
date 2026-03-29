@@ -62,14 +62,33 @@ export default function Home() {
     })
   }
 
+  // const formatSeriesName = (slug) => {
+  //   const parts = slug.split('-')
+  //   const roman = parts[parts.length - 1].toUpperCase()
+  //   const name = parts.slice(0, -1).join(' ')
+  //   return {
+  //     name: name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+  //     number: roman
+  //   }
+  // }
   const formatSeriesName = (slug) => {
+    // Check if last part looks like a Roman numeral
     const parts = slug.split('-')
-    const roman = parts[parts.length - 1].toUpperCase()
-    const name = parts.slice(0, -1).join(' ')
-    return {
-      name: name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-      number: roman
+    const lastPart = parts[parts.length - 1].toUpperCase()
+    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+
+    if (romanNumerals.includes(lastPart)) {
+      const name = parts.slice(0, -1)
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ')
+      return { name, number: lastPart }
     }
+
+    // For new series with no Roman numeral suffix
+    const name = parts
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+    return { name, number: null }
   }
 
   if (loading) return <div className="spinner" />
@@ -104,7 +123,11 @@ export default function Home() {
                   >
                     <div className="series-item-header">
                       <span className="series-item-name">
-                        {formatted.name} · {formatted.number}
+                        {/* {formatted.name} · {formatted.number} */}
+                        {formatted.number
+                          ? `${formatted.name} · ${formatted.number}`
+                          : formatted.name
+                        }
                       </span>
                       <span className="series-item-count">{series.count} posts</span>
                     </div>
