@@ -91,7 +91,7 @@ export default function Post() {
       {/* Series breadcrumb */}
       {post.series && (
         <div className="post-series-crumb">
-          <Link to={`/series/${post.series}`}>← love in small letters · {post.series.split('-').pop().toUpperCase()}</Link>
+          <Link to={`/series/${post.series}`}>← Small letters · {post.series.split('-').pop().toUpperCase()}</Link>
           <span>piece {post.seriesPosition} of 5</span>
         </div>
       )}
