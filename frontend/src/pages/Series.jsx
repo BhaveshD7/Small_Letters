@@ -1,15 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAllSeries } from '../api/posts'
+import { SERIES_CONFIG } from '../data/seriesConfig'
 import './Series.css'
-
-const SERIES_META = {
-  'love-in-small-letters-i': { num: 'I', title: 'Hidden Gestures', desc: 'The things I do that she\'ll never see. Small acts of care that exist in silence, unnoticed and unspoken.' },
-  'love-in-small-letters-ii': { num: 'II', title: 'Comfortable silence', desc: 'When words become optional and presence says everything. The evolution of quiet between two people learning to just exist together.' },
-  'love-in-small-letters-iii': { num: 'III', title: 'Small Things That Nobody Else Notices', desc: 'Tiny details the world walks past but I memorize. The microscopic language of someone I\'ve learned to read.Letters written across silence, across distance, across time zones and missed calls.' },
-  'love-in-small-letters-iv': { num: 'IV', title: 'The Weight of Almost', desc: 'Endings that aren\'t really endings. What remains when the feeling has been felt.' },
-  'love-in-small-letters-v': { num: 'V', title: 'Love isn\'t Butterflies', desc: 'Love isn\'t butterflies for me anymore. It\'s deeper than that. It\'s comfort. It\'s showing up. It\'s choosing someone on ordinary days.' },
-}
 
 export default function Series() {
   const [series, setSeries] = useState([])
@@ -36,19 +29,19 @@ export default function Series() {
       </div>
 
       <div className="series-grid">
-        {Object.entries(SERIES_META).map(([slug, meta], idx) => {
-          const data = series.find(s => s.seriesSlug === slug)
+        {SERIES_CONFIG.map((meta) => {
+          const data = series.find(s => s.seriesSlug === meta.slug)
           const count = data?.count || 0
 
           return (
-            <Link key={slug} to={`/series/${slug}`} className="series-card">
+            <Link key={meta.slug} to={`/series/${meta.slug}`} className="series-card">
               <div className="series-card-num">{meta.num}</div>
               <div className="series-card-body">
                 <p className="series-card-label">love in small letters · {meta.num}</p>
                 <h3>{meta.title}</h3>
                 <p className="series-card-desc">{meta.desc}</p>
                 <div className="series-card-footer">
-                  <span className="series-count">{count}/5 pieces</span>
+                  <span className="series-count">{count}/{meta.totalParts} pieces</span>
                   <span className="series-read">read series →</span>
                 </div>
               </div>

@@ -1,137 +1,3 @@
-// import { useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
-// import { createPost } from '../api/posts'
-// import './AdminWrite.css'
-
-// const SERIES_OPTIONS = [
-//   { value: '',                          label: '— not part of a series —' },
-//   { value: 'love-in-small-letters-i',   label: 'Love in Small Letters · I — the beginning of love' },
-//   { value: 'love-in-small-letters-ii',  label: 'Love in Small Letters · II — love that stays' },
-//   { value: 'love-in-small-letters-iii', label: 'Love in Small Letters · III — the distance between us' },
-//   { value: 'love-in-small-letters-iv',  label: 'Love in Small Letters · IV — what love leaves behind' },
-//   { value: 'love-in-small-letters-v',   label: 'Love in Small Letters · V — loving yourself, finally' },
-// ]
-
-// const POST_TYPES = ['essay', 'quote', 'phrase', 'paragraph', 'series']
-
-// export default function AdminWrite() {
-//   const navigate = useNavigate()
-//   const [form, setForm] = useState({
-//     title: '', subtitle: '', body: '', coverImage: '',
-//     postType: 'essay', series: '', seriesPosition: '',
-//     isPremium: false, isPublished: false, tags: '',
-//   })
-//   const [loading, setLoading] = useState(false)
-//   const [error, setError]     = useState('')
-//   const [success, setSuccess] = useState('')
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target
-//     setForm({ ...form, [name]: type === 'checkbox' ? checked : value })
-//   }
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault()
-//     setLoading(true); setError(''); setSuccess('')
-//     try {
-//       const payload = {
-//         ...form,
-//         tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
-//         seriesPosition: form.seriesPosition ? parseInt(form.seriesPosition) : null,
-//       }
-//       const res = await createPost(payload)
-//       setSuccess(`${form.isPublished ? 'Published' : 'Draft saved'} — redirecting…`)
-//       setTimeout(() => navigate(`/post/${res.data.post.slug}`), 1200)
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Failed to save.')
-//     } finally {
-//       setLoading(false)
-//     }
-//   }
-
-//   return (
-//     <div className="write-page container">
-//       <div className="write-header">
-//         <h2>write a new piece</h2>
-//         <p>small letters · admin only</p>
-//       </div>
-
-//       {error   && <div className="msg-error">{error}</div>}
-//       {success && <div className="msg-success">{success}</div>}
-
-//       <form onSubmit={handleSubmit} className="write-form">
-
-//         <div className="write-row-2">
-//           <div className="field">
-//             <label>Post type</label>
-//             <select name="postType" value={form.postType} onChange={handleChange}>
-//               {POST_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-//             </select>
-//           </div>
-//           <div className="field">
-//             <label>Series</label>
-//             <select name="series" value={form.series} onChange={handleChange}>
-//               {SERIES_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-//             </select>
-//           </div>
-//         </div>
-
-//         {form.series && (
-//           <div className="field" style={{ maxWidth: 200 }}>
-//             <label>Position in series (1–5)</label>
-//             <select name="seriesPosition" value={form.seriesPosition} onChange={handleChange}>
-//               <option value="">— select —</option>
-//               {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
-//             </select>
-//           </div>
-//         )}
-
-//         <div className="field">
-//           <label>Title *</label>
-//           <input name="title" value={form.title} onChange={handleChange} placeholder="Post title" required />
-//         </div>
-
-//         <div className="field">
-//           <label>Subtitle <span className="hint">— shown below the title and in cards</span></label>
-//           <input name="subtitle" value={form.subtitle} onChange={handleChange} placeholder="optional one-liner" />
-//         </div>
-
-//         <div className="field">
-//           <label>Cover image URL</label>
-//           <input name="coverImage" value={form.coverImage} onChange={handleChange} placeholder="https://..." />
-//         </div>
-
-//         <div className="field">
-//           <label>Body * <span className="hint">HTML supported — &lt;p&gt;, &lt;blockquote&gt;, &lt;em&gt;, &lt;h2&gt;</span></label>
-//           <textarea name="body" value={form.body} onChange={handleChange} rows={16} placeholder="<p>write here...</p>" required />
-//         </div>
-
-//         <div className="field">
-//           <label>Tags <span className="hint">comma-separated: love, longing, distance</span></label>
-//           <input name="tags" value={form.tags} onChange={handleChange} placeholder="love, series, longing" />
-//         </div>
-
-//         <div className="write-toggles">
-//           <label className="toggle">
-//             <input type="checkbox" name="isPremium" checked={form.isPremium} onChange={handleChange} />
-//             <span>Premium — show paywall to non-subscribers</span>
-//           </label>
-//           <label className="toggle">
-//             <input type="checkbox" name="isPublished" checked={form.isPublished} onChange={handleChange} />
-//             <span>Published — visible on site immediately</span>
-//           </label>
-//         </div>
-
-//         <div className="write-actions">
-//           <button type="submit" className="btn-rose" disabled={loading}>
-//             {loading ? 'saving…' : form.isPublished ? '✓ publish piece' : 'save draft'}
-//           </button>
-//           <button type="button" className="btn-ghost" onClick={() => navigate('/')}>cancel</button>
-//         </div>
-//       </form>
-//     </div>
-//   )
-// }
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createPost } from '../api/posts'
@@ -139,6 +5,8 @@ import { useDropzone } from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './AdminWrite.css'
+import { SERIES_CONFIG } from '../../data/seriesConfig';
+
 
 const POST_TYPES = ['essay', 'quote', 'phrase', 'paragraph', 'series']
 
@@ -281,15 +149,19 @@ export default function AdminWrite() {
   }
 
   // Helper function to get series title from slug
+  // const getSeriesTitle = (slug) => {
+  //   const titles = {
+  //     'love-in-small-letters-i': 'Hidden Gestures',
+  //     'love-in-small-letters-ii': 'Comfortable Silence',
+  //     'love-in-small-letters-iii': 'Little Things That Nobody Else Notices',
+  //     'love-in-small-letters-iv': 'The Weight of Almost',
+  //     'love-in-small-letters-v': "Love Isn't Butterflies"
+  //   }
+  //   return titles[slug] || slug
+  // }
   const getSeriesTitle = (slug) => {
-    const titles = {
-      'love-in-small-letters-i': 'Hidden Gestures',
-      'love-in-small-letters-ii': 'Comfortable Silence',
-      'love-in-small-letters-iii': 'Little Things That Nobody Else Notices',
-      'love-in-small-letters-iv': 'The Weight of Almost',
-      'love-in-small-letters-v': "Love Isn't Butterflies"
-    }
-    return titles[slug] || slug
+    const found = SERIES_CONFIG.find(s => s.slug === slug)
+    return found ? found.title : slug
   }
 
   return (
@@ -401,7 +273,7 @@ export default function AdminWrite() {
                     <>
                       <div className="field">
                         <label>Which sub-series? *</label>
-                        <select
+                        {/* <select
                           name="series"
                           value={form.series}
                           onChange={handleChange}
@@ -414,6 +286,21 @@ export default function AdminWrite() {
                           <option value="love-in-small-letters-iii">III · Little Things That Nobody Else Notices</option>
                           <option value="love-in-small-letters-iv">IV · The Weight of Almost</option>
                           <option value="love-in-small-letters-v">V · Love Isn't Butterflies</option>
+                           <option value="the-way-you-taste">The Way You Taste</option>
+                        </select> */}
+                        <select
+                          name="series"
+                          value={form.series}
+                          onChange={handleChange}
+                          className="nice-select"
+                          required
+                        >
+                          <option value="">— Select a sub-series —</option>
+                          {SERIES_CONFIG.map(s => (
+                            <option key={s.slug} value={s.slug}>
+                              {s.num} · {s.title}
+                            </option>
+                          ))}
                         </select>
                         <small className="field-hint">
                           Part of the main "Love in Small Letters" series

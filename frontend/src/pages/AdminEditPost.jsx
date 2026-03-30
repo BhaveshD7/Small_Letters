@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './AdminWrite.css'
+import { SERIES_CONFIG } from '../../data/seriesConfig'
 
 const POST_TYPES = ['essay', 'quote', 'phrase', 'paragraph', 'series']
 
@@ -70,7 +71,8 @@ export default function AdminEditPost() {
             }
 
             if (post.series) {
-                const existingSeries = ['love-in-small-letters-i', 'love-in-small-letters-ii', 'love-in-small-letters-iii', 'love-in-small-letters-iv', 'love-in-small-letters-v']
+                // const existingSeries = ['love-in-small-letters-i', 'love-in-small-letters-ii', 'love-in-small-letters-iii', 'love-in-small-letters-iv', 'love-in-small-letters-v']
+                const existingSeries = SERIES_CONFIG.map(s => s.slug)
                 if (existingSeries.includes(post.series)) {
                     setSeriesMode('existing')
                 } else {
@@ -238,13 +240,26 @@ export default function AdminEditPost() {
                                         <>
                                             <div className="field">
                                                 <label>Which sub-series?</label>
-                                                <select name="series" value={form.series} onChange={handleChange} className="nice-select">
+                                                {/* <select name="series" value={form.series} onChange={handleChange} className="nice-select">
                                                     <option value="">— Select series —</option>
                                                     <option value="love-in-small-letters-i">I · Hidden Gestures</option>
                                                     <option value="love-in-small-letters-ii">II · Comfortable Silence</option>
                                                     <option value="love-in-small-letters-iii">III · Little Things That Nobody Else Notices</option>
                                                     <option value="love-in-small-letters-iv">IV · The Weight of Almost</option>
                                                     <option value="love-in-small-letters-v">V · Love Isn't Butterflies</option>
+                                                </select> */}
+                                                <select
+                                                    name="series"
+                                                    value={form.series}
+                                                    onChange={handleChange}
+                                                    className="nice-select"
+                                                >
+                                                    <option value="">— Select series —</option>
+                                                    {SERIES_CONFIG.map(s => (
+                                                        <option key={s.slug} value={s.slug}>
+                                                            {s.num} · {s.title}
+                                                        </option>
+                                                    ))}
                                                 </select>
                                             </div>
 
