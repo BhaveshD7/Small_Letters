@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './AdminWrite.css'
-import { SERIES_CONFIG } from '../../data/seriesConfig'
+import { SERIES_CONFIG } from '../data/seriesConfig'
 
 const POST_TYPES = ['essay', 'quote', 'phrase', 'paragraph', 'series']
 
